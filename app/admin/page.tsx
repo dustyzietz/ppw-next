@@ -8,21 +8,35 @@ const api = new WooCommerceRestApi({
 });
 
 async function getData() {
-    const res = await api.get("products", {
-        per_page: 20,
-        // fetch by category
-        category: 39,
-        // 20 products per page
-    });
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
-   // console.log(res.data);
+  const res = await api.get("products", {
+    per_page: 20,
+    // fetch by category
+    category: 39,
+     // 20 products per page
+});
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+ //console.log(res.data)
+   
+ 
+  return res.data
+}
 
-    return res.data;
+async function getOrders() {
+  const orders = await api.get("orders", {
+    per_page: 20,
+    // fetch by category
+    category: 39,
+     // 20 products per page
+});
+ //console.log(orders.data)
+  return orders.data
 }
 
 export default async function Products() {
-    const products = await getData();
+  const products = await getData()  
+  const orders = await getOrders()
+   
 
     return (
         <main>
@@ -39,7 +53,8 @@ export default async function Products() {
                     className="text-xl block m-6 underline text-blue-600"
                     href="/account"
                 >
-                    Custom Orders
+                    {" "}
+                    Custom Orders{" "}
                 </a>
                 <a
                     className="text-xl block m-6 underline text-blue-600"
@@ -67,6 +82,19 @@ export default async function Products() {
                     </div>
                 )
             )}
+            {orders.map(
+                (order: {
+                    id: number;
+                    total: string;
+                }) => (
+                    <div key={order.id}>
+                        <h2>{order.total}</h2>
+                        
+                    </div>
+                )
+            )}
         </main>
     );
 }
+
+
