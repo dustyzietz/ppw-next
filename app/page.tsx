@@ -50,7 +50,7 @@ export default function Home() {
                     personality through custom products, our platform empowers
                     you to create something truly one-of-a-kind.
                 </p>
-                <div className="text-center m-6 w-full">
+                <div className="text-center my-6 w-full">
                     <Link href="/custom-form">
                         <Button text="Create Your Design Now" />
                     </Link>
@@ -127,8 +127,8 @@ export default function Home() {
                         },
                     ]}
                 />
-                <div className="text-center m-6 w-full">
-                    <Link href="/reseller-form">
+                <div className="text-center my-6 w-full">
+                    <Link href="/reseller-application">
                         <Button text="Apply Now" />
                     </Link>
                 </div>
@@ -153,9 +153,9 @@ export default function Home() {
             Stay Organized and Informed</h2>
 <p>Welcome to your personalized hub for managing your custom orders and Reseller Application status. Keep track of your designs, monitor the progress of your orders, and stay updated on your Reseller Application all in one convenient location.</p>
 
- <div className="m-8 text-center" ><Button text="View Orders" /></div> 
+ <div className="my-8 text-center" ><Button text="View Orders" /></div> 
 
-  <div className="m-8 text-center" ><Button text="Application Status" /></div>
+  <div className="my-8 text-center" ><Button text="Application Status" /></div>
 
 
 <List
