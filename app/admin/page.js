@@ -64,12 +64,7 @@ export default async function Products() {
                 </a>
             </div>
             {products.map(
-                (product: {
-                    id: number;
-                    name: string;
-                    price: number;
-                    images?: { src: string }[];
-                }) => (
+                (product) => (
                     <div key={product.id}>
                         <h2>{product.name}</h2>
                         <p>{product.price}</p>
@@ -83,10 +78,7 @@ export default async function Products() {
                 )
             )}
             {orders.map(
-                (order: {
-                    id: number;
-                    total: string;
-                }) => (
+                (order) => (
                     <div key={order.id}>
                         <h2>{order.total}</h2>
                         
