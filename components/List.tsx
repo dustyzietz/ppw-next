@@ -1,6 +1,12 @@
 import React from "react";
 
-const List = ({ listItems, listHeader, numbered }) => {
+  interface ListProps {
+    listHeader?: string;
+    listItems: { header?: string; body?: string }[];
+    numbered?: boolean; // Making 'numbered' prop optional
+}
+
+const List: React.FC<ListProps> = ({ listItems, listHeader, numbered }) => {
     return (
         <>
             <h3 className="mb-2 mt-12 text-xl text-left">{listHeader}</h3>
