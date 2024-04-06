@@ -3,39 +3,12 @@ import Button from "@/components/Button";
 import List from "@/components/List";
 import Image from "next/image";
 import Link from "next/link";
-const imageOverlay = false;
-const textOverlay = true;
+import Hero from "@/components/Hero";
 
 export default function Home() {
     return (
         <main>
-            <section className="relative">
-                <div
-                    className={`absolute right-0 left-0 top-0 bottom-0 text-white flex justify-center align-center flex-col text-center ${
-                        imageOverlay ? "bg-opacity-60 bg-black " : ""
-                    }`}
-                >
-                    <div
-                        className={`p-4 w-96 m-auto rounded-xl ${
-                            textOverlay ? " bg-opacity-70 bg-black " : ""
-                        }`}
-                    >
-                        <h1 className="text-3xl mb-4">
-                            Create Your Own Unique Products with Price Point
-                            Wholesale
-                        </h1>
-                    </div>
-                </div>
-                <Image
-                    height={800}
-                    width={1920}
-                    quality={80}
-                    src="/stock-packaging-home.jpeg"
-                    alt=""
-                    priority
-                    className="max-h-96 w-full object-cover"
-                />
-            </section>
+          <Hero textOverlay={true} text=" Create Your Own Unique Products with Price Point Wholesale" image="/stock-packaging-home.jpeg" />
             <section className="container max-w-5xl w-full mx-auto text-center ">
                 <h2 className="m-6 mt-12 text-2xl">
                     Unleash Your Creativity with Custom Designs!
@@ -153,9 +126,9 @@ export default function Home() {
             Stay Organized and Informed</h2>
 <p>Welcome to your personalized hub for managing your custom orders and Reseller Application status. Keep track of your designs, monitor the progress of your orders, and stay updated on your Reseller Application all in one convenient location.</p>
 
- <div className="my-8 text-center" ><Button text="View Orders" /></div> 
+ <div className="my-8 text-center" ><Link href="/account#orders" ><Button text="View Orders" /></Link></div> 
 
-  <div className="my-8 text-center" ><Button text="Application Status" /></div>
+  <div className="my-8 text-center" ><Link  href="/account#application"><Button text="Application Status" /></Link></div>
 
 
 <List

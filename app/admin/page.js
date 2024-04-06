@@ -1,4 +1,6 @@
+import Form from './form';
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+
 
 const api = new WooCommerceRestApi({
     url: "http://pricepointwholesale.com",
@@ -36,33 +38,12 @@ async function getOrders() {
 export default async function Products() {
   const products = await getData()  
   const orders = await getOrders()
+
    
 
     return (
         <main>
-            <div className="container max-w-5xl w-full mx-auto text-center ">
-                <h1 className="m-12">Custom Price Point Wholesale</h1>
-                <a
-                    className="text-xl block m-6 underline text-blue-600"
-                    href="https://pricepointwholesale.com/shop"
-                >
-                    {" "}
-                    All Products{" "}
-                </a>
-                <a
-                    className="text-xl block m-6 underline text-blue-600"
-                    href="/account"
-                >
-                    {" "}
-                    Custom Orders{" "}
-                </a>
-                <a
-                    className="text-xl block m-6 underline text-blue-600"
-                    href="/products"
-                >
-                    Resellers Products
-                </a>
-            </div>
+            <Form />
             {products.map(
                 (product) => (
                     <div key={product.id}>
