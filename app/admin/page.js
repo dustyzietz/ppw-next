@@ -5,7 +5,7 @@ import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 const api = new WooCommerceRestApi({
     url: "http://pricepointwholesale.com",
     consumerKey: process.env.NEXT_PUBLIC_CONSUMER_KEY,
-    consumerSecret: process.env.NEXT_PUBLIC_CONSUMER_SECRET,
+    consumerSecret: process.env.CONSUMER_SECRET,
     version: "wc/v3",
 });
 

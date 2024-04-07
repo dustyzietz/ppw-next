@@ -8,16 +8,25 @@ const Form = () => {
   })
 
   const handleSubmit = async () => {
-    console.log(formData)
-    const response = await fetch('https://pricepointwholesale.com/wp-json/jwt-auth/v1/token', { 
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    console.log(response)
-  }
+    try {
+      const response = await fetch('https://pricepointwholesale.com/wp-json/jwt-auth/v1/token', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to login');
+      }
+
+      const responseData = await response.json();
+      console.log(responseData?.body); // This will log the parsed response data
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <form>
