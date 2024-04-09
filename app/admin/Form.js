@@ -18,7 +18,7 @@ const Form = ({authenticated, setAuthenticated}) => {
           headers: {
             'Content-Type': 'application/json',
             // get token cookie
-            'Authorization': `Bearer ${document.cookie.split('; ').find(cookie => cookie.startsWith('token=')).split('=')[1]}`
+            'Authorization': `Bearer ${document.cookie.split('; ').find(cookie => cookie.startsWith('token='))?.split('=')[1]}`
           }
         });
         if (response.ok) {

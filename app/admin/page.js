@@ -37,7 +37,7 @@ import {useState} from 'react'
 //   return orders.data
 // }
 
-export default async function Products() {
+export default function Admin() {
   const products = []
   const orders = []
   const [authenticated, setAuthenticated] = useState(false)
