@@ -4,12 +4,12 @@ import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 import {useState} from 'react'
 
 
-// const api = new WooCommerceRestApi({
-//     url: "http://pricepointwholesale.com",
-//     consumerKey: process.env.NEXT_PUBLIC_CONSUMER_KEY,
-//     consumerSecret: process.env.CONSUMER_SECRET,
-//     version: "wc/v3",
-// });
+const api = new WooCommerceRestApi({
+    url: "http://pricepointwholesale.com",
+    consumerKey: process.env.NEXT_PUBLIC_CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    version: "wc/v3",
+});
 
 // async function getData() {
 //   const res = await api.get("products", {
@@ -26,21 +26,35 @@ import {useState} from 'react'
 //   return res.data
 // }
 
-// async function getOrders() {
-//   const orders = await api.get("orders", {
-//     per_page: 20,
-//     // fetch by category
-//     category: 39,
-//      // 20 products per page
-// });
-//  //console.log(orders.data)
-//   return orders.data
-// }
+async function getOrders() {
+  const orders = await api.get("orders", {
+    per_page: 20,
+    // fetch by category
+    category: 39,
+     // 20 products per page
+});
+ //console.log(orders.data)
+  return orders.data
+}
 
 export default function Admin() {
   const products = []
-  const orders = []
+  const [orders, setOrders] = useState([])
   const [authenticated, setAuthenticated] = useState(false)
+
+  useEffect(()=>{
+  const fetchOrders = async () => {
+    const orders = await api.get("orders", {
+        per_page: 20,
+        // fetch by category
+        category: 39,
+         // 20 products per page
+    });
+     //console.log(orders.data)
+      setOrders(orders.data) 
+  }
+  fetchOrders()
+  },[])
 
     return (
         <main>
