@@ -1,7 +1,7 @@
 "use client"
 import Form from './Form';
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 
 const api = new WooCommerceRestApi({
