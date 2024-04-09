@@ -1,11 +1,38 @@
 'use client'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-const Form = () => {
+
+const Form = ({authenticated, setAuthenticated}) => {
+  
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   })
+
+  useEffect(()=>{
+    // check if auth token is valid
+    const checkAuthToken = async () => {
+      try {
+        const response = await fetch('https://pricepointwholesale.com/wp-json/jwt-auth/v1/token/validate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // get token cookie
+            'Authorization': `Bearer ${document.cookie.split('; ').find(cookie => cookie.startsWith('token=')).split('=')[1]}`
+          }
+        });
+        if (response.ok) {
+          console.log('Token is valid');
+          setAuthenticated(true)
+        } else {
+          console.log('Token is invalid');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    checkAuthToken()
+  },[])
 
   const handleSubmit = async () => {
     try {
@@ -22,7 +49,12 @@ const Form = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData?.body); // This will log the parsed response data
+      console.log(responseData); // This will log the parsed response data
+      // Save token and user information to cookies
+      document.cookie = `token=${responseData.token}; path=/`;
+      document.cookie = `user_email=${responseData.user_email}; path=/`;
+      document.cookie = `user_nicename=${responseData.user_nicename}; path=/`;
+      document.cookie = `user_display_name=${responseData.user_display_name}; path=/`;
     } catch (error) {
       console.error('Error:', error);
     }
