@@ -1,11 +1,12 @@
 import Button from '@/components/Button'
+import Link from 'next/link'
 import React from 'react'
 
 const page = () => {
   return (
     <div className="container max-w-5xl mx-auto mt-12">
       <h1 className="text-3xl font-semibold leading-9 text-gray-900">Reseller Application<div className='float-right' ><Button text="Submit" /></div></h1>
-
+      <Link  href="https://pricepointwholesale.com/my-account"><p className="pt-4 text-blue-600">Back to My Account</p></Link>
      <form >
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">

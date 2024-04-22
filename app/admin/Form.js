@@ -52,9 +52,6 @@ const Form = ({authenticated, setAuthenticated}) => {
       console.log(responseData); // This will log the parsed response data
       // Save token and user information to cookies
       document.cookie = `token=${responseData.token}; path=/`;
-      document.cookie = `user_email=${responseData.user_email}; path=/`;
-      document.cookie = `user_nicename=${responseData.user_nicename}; path=/`;
-      document.cookie = `user_display_name=${responseData.user_display_name}; path=/`;
     } catch (error) {
       console.error('Error:', error);
     }
