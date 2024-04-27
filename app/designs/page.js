@@ -57,9 +57,14 @@ const page = () => {
     }, []);
 
     async function fetchTheDesigns() {
-        const designs = await fetchDesigns(token);
-        setDesigns(designs);
-    }
+      try {
+          const designs = await fetchDesigns(token);
+          setDesigns(designs);
+      } catch (error) {
+          console.error('Error fetching designs:', error);
+          setError('An error occurred while fetching designs. Please try again later.');
+      }
+  }
 
     const handleSaveImage = () => {
         if (imageUrl?.length) {
@@ -67,7 +72,7 @@ const page = () => {
             setNewDesign({ ...newDesign, images: newImages });
             setImageUrl("");
         } else {
-            alert("Please Uplead Image");
+            alert("Please Upload Image");
         }
     };
 

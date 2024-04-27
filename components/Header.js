@@ -11,9 +11,11 @@ const Header = () => {
           <h1 className="flex-grow text-3xl"><a href="https://pricepointwholesale.com">Price Point Wholesale</a></h1>
           <nav>
             <ul className="flex">
-              <li className="px-2"><a>All Products</a></li>
-              <li className="px-2"><Link href="/custom-form">Custom Product Form</Link></li>
-              <li className="px-2"><Link href="/reseller-application">Reseller Application</Link></li>
+              <li className="px-2"><Link href="https://pricepointwholesale.com/shop">Shop</Link></li>
+              <li className="px-2"><Link href="/designs">Designs</Link></li>
+              <li className="px-2"><Link href="/reseller">Reseller</Link></li>
+              <li className="px-2"><Link href="https://pricepointwholesale.com/my-account">My Account</Link></li>
+
             {/* <li className="px-2">My Custom Orders</li> */}
             </ul>
           </nav>
