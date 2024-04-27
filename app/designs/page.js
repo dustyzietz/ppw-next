@@ -251,8 +251,7 @@ const page = () => {
                 Existing Designs
             </h2>
             <div className="grid grid-cols-1 gap-4 mt-4">
-              {console.log(designs)}
-                {/* {designs?.map((design, index) => (
+                {designs?.map((design, index) => (
                     <div
                         key={index}
                         className="bg-white shadow-md rounded-lg p-4 grid grid-cols-6"
@@ -267,7 +266,7 @@ const page = () => {
                             <Button text="Edit" />
                         </div>
                     </div>
-                ))} */}
+                ))}
             </div> 
         </div>
     );
