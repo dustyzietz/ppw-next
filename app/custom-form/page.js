@@ -105,11 +105,11 @@ const page = () => {
         newDesign;
     return (
         <div className="container max-w-5xl mx-auto mt-12">
-            <h1 className="text-3xl font-semibold leading-9 text-gray-900">
+            {/* <h1 className="text-3xl font-semibold leading-9 text-gray-900">
                 Designs
             </h1>
             <Link  href="https://pricepointwholesale.com/my-account"><p className="pt-4 text-blue-600">Back to My Account</p></Link>
-            {/* If there are no designs show the form, else show an Create New Design button */}
+       
             {designs.length === 0 || newDesign ? (
                 <form>
                     <div className="space-y-12 border rounded p-6 m-8">
@@ -262,7 +262,7 @@ const page = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };
