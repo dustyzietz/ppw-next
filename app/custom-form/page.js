@@ -110,7 +110,7 @@ const page = () => {
             </h1>
             <Link  href="https://pricepointwholesale.com/my-account"><p className="pt-4 text-blue-600">Back to My Account</p></Link>
        
-            {/* {designs.length === 0 || newDesign ? (
+             {designs.length === 0 || newDesign ? (
                 <form>
                     <div className="space-y-12 border rounded p-6 m-8">
                         <h2 className="text-xl font-semibold">
@@ -240,13 +240,13 @@ const page = () => {
                 >
                     Create New Design
                 </button>
-            )} */}
+            )} 
 
             <h2 className="text-2xl font-semibold leading-9 text-gray-900 mt-12">
                 Existing Designs
             </h2>
             <div className="grid grid-cols-1 gap-4 mt-4">
-                {designs?.map((design, index) => (
+                {/* {designs?.map((design, index) => (
                     <div
                         key={index}
                         className="bg-white shadow-md rounded-lg p-4 grid grid-cols-6"
@@ -261,7 +261,7 @@ const page = () => {
                             <Button text="Edit" />
                         </div>
                     </div>
-                ))}
+                ))} */}
             </div> 
         </div>
     );
