@@ -125,6 +125,7 @@ const Orders = () => {
             <h1 className="text-3xl font-semibold leading-9 text-gray-900">
                 Orders
             </h1>
+            <Link  href="https://pricepointwholesale.com/my-account"><p className="pt-4 text-blue-600">Back to My Account</p></Link>
             <OrderTable
                 title="Custom Orders"
                 description="A list of Custom Orders."
