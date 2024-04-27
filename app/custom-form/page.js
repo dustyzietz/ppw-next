@@ -246,6 +246,7 @@ const page = () => {
                 Existing Designs
             </h2>
             <div className="grid grid-cols-1 gap-4 mt-4">
+              {console.log(designs)}
                 {/* {designs?.map((design, index) => (
                     <div
                         key={index}
