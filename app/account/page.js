@@ -15,7 +15,6 @@ async function getOrders() {
         customer: 1,
       
     });
-    console.log(orders.data)
     return orders.data;
 }
 
@@ -27,7 +26,6 @@ export default async function Products() {
             {orders.map((order) => (
                 <div key={order.id}>
                     <h2>{order.total}</h2>
-                    {console.log(order._links)}
                 </div>
             ))}
         </main>

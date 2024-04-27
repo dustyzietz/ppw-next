@@ -49,8 +49,6 @@ const Form = ({authenticated, setAuthenticated}) => {
       }
 
       const responseData = await response.json();
-      console.log(responseData); // This will log the parsed response data
-      // Save token and user information to cookies
       document.cookie = `token=${responseData.token}; path=/`;
     } catch (error) {
       console.error('Error:', error);

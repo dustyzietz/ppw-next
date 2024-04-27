@@ -38,10 +38,16 @@ export async function fetchOrdersForCurrentUser(id) {
   // get current logged in user id
   const res = await api.get("orders", {
     per_page: 20,
-    // fetch by category
+    // fetch by customer
     customer: id,
 });
- return res.data
+  const customRes = await api.get("orders", {
+    per_page: 20,
+    // fetch by customer
+    customer: id,
+    category: 40,
+});
+ return {orders: res.data, customOrders: customRes.data}
 }
 
 export async function fetchUsers(token) {
@@ -97,13 +103,45 @@ export async function fetchCurrentUser(token) {
 }
 
 export async function fetchDesigns(token) {
-  // fetch users from Wordpress rest api
-  const res = await fetch('https://pricepointwholesale.com/wp-json/custom/v1/user-designs', {
+  try {
+    const res = await fetch('https://pricepointwholesale.com/wp-json/custom/v1/user-designs', {
     headers: {
-        Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
   });
     const body = await res.json();
+  return body
+} catch (error) {
+  throw new Error(`This is error is in the Server Action`);
+}  
+}
+
+export async function fetchProductDesigns(token) {
+  try {
+    const res = await fetch('https://pricepointwholesale.com/wp-json/custom/v1/product-designs', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+    const body = await res.json();
+  return body
+} catch (error) {
+  throw new Error(`This is error is in the Server Action`);
+}  
+}
+
+export async function linkDesign(token, data) {
+  const res = await fetch('https://pricepointwholesale.com/wp-json/custom/v1/product-designs', {
+    method: 'POST',
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  const body = await res.json();
   return body
 }
 
@@ -143,12 +181,6 @@ export async function updateTemplate(token, data) {
   const body = await res.json();
   return body
 }
-
-
-
-
-
-
 
 const AWS = require('aws-sdk')
 AWS.config.update({ 

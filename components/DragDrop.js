@@ -44,7 +44,6 @@ const DragDrop = ({ imageUrl, setImageUrl, className }) => {
     // Get the presigned URL
     let response = await getPresignedUrl(type)
     
-    console.log(response, response.uploadURL)
     let binary = atob(image.split(",")[1]);
     let array = [];
     for (var i = 0; i < binary.length; i++) {
