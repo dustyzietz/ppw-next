@@ -9,6 +9,7 @@ import {
 } from "../actions";
 import AddTemplateModal from "./AddTemplateModal";
 import Image from "next/image";
+import PDFLink from "@/components/PDFLink";
 
 export default function Admin() {
     const [orders, setOrders] = useState([]);
@@ -302,14 +303,17 @@ export default function Admin() {
                                                         {product.name}
                                                     </td>
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            
-                                                       {template?.template ? (
-                                                            <Image
-                                                                src={template.template}
-                                                                alt={product.name}
-                                                                height={40}
-                                                                width={40}
-                                                            />
+                                                        {template?.template ? (
+                                                            template.template.endsWith('.pdf') ? (
+                                                                <PDFLink pdfUrl={template.template} />
+                                                            ) : (
+                                                                <Image
+                                                                    src={template.template}
+                                                                    alt={product.name}
+                                                                    height={40}
+                                                                    width={40}
+                                                                />
+                                                            )
                                                         ) : (
                                                             "No Template"
                                                         )}

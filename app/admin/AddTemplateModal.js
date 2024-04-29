@@ -3,8 +3,7 @@ import Modal from "../../components/Modal";
 import DragDrop from "@/components/DragDrop";
 import Button from "@/components/Button";
 import { addTemplate, updateTemplate } from "../actions";
-import Image from "next/image";
-import { get } from "http";
+import ImageOrPdfPreview from "@/components/ImageOrPdfPreview";
 
 const AddTemplateModal = ({ product_id, template_id, oldTemplate, getTemplates }) => {
     const [open, setOpen] = useState(false);
@@ -63,7 +62,7 @@ const AddTemplateModal = ({ product_id, template_id, oldTemplate, getTemplates }
                 {template_id && <h2>Template ID: {template_id}</h2>}  
                 {oldTemplate && <>
                   <h2>Current Template:</h2>
-                  <Image src={oldTemplate} alt="old template" height={400} width={400}/>
+                  <ImageOrPdfPreview imageUrl={oldTemplate} />
                 </>}
                 <h2 className="pt-6">New Template Image:</h2>
                 <DragDrop className="pb-6" imageUrl={imageUrl} setImageUrl={setImageUrl} />

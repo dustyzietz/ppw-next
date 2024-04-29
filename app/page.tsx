@@ -24,7 +24,7 @@ export default function Home() {
                     you to create something truly one-of-a-kind.
                 </p>
                 <div className="text-center my-6 w-full">
-                    <Link href="/custom-form">
+                    <Link href="/designs">
                         <Button text="Create Your Design Now" />
                     </Link>
                 </div>

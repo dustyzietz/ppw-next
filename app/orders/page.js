@@ -14,7 +14,6 @@ import dayjs from "dayjs";
 const Orders = () => {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
-    const [customOrders, setCustomOrders] = useState(null);
     const [designs, setDesigns] = useState([]);
     const [productDesigns, setProductDesigns] = useState([]);
 
@@ -38,16 +37,9 @@ const Orders = () => {
         if (user?.user_id) {
             async function fetchOrders() {
                 const orderData = await fetchOrdersForCurrentUser(user.user_id);
-                const { orders, customOrders } = orderData;
-                const filteredOrders = orders.filter(
-                    (order) =>
-                        !customOrders.some(
-                            (customOrder) => customOrder.id === order.id
-                        )
-                );
-                setOrders(filteredOrders);
-                setOrders(filteredOrders);
-                setCustomOrders(customOrders);
+                const { data } = orderData;
+                
+                setOrders(data);
             }
             fetchOrders();
         }
@@ -86,17 +78,8 @@ const Orders = () => {
     }, []);
 
     const headers = ["Order", "Date", "Status", "Total"];
-    const data = orders?.map((order) => ({
-        row: [
-            order?.id,
-            dayjs(order?.date_created).format("MMMM DD, YYYY"),
-            `${order?.status} for ${order.line_items.length} items`,
-            order.total,
-        ],
-        lineItems: order.line_items,
-    }));
 
-    const customData = customOrders?.map((order) => ({
+    const data = orders?.map((order) => ({
         row: [
             order?.id,
             dayjs(order?.date_created).format("MMMM DD, YYYY"),
@@ -127,21 +110,15 @@ const Orders = () => {
             </h1>
             <Link  href="https://pricepointwholesale.com/my-account"><p className="pt-4 text-blue-600">Back to My Account</p></Link>
             <OrderTable
-                title="Custom Orders"
-                description="A list of Custom Orders."
+                title="Orders"
+                description="A list of Your Orders."
                 headers={headers}
-                data={customData}
+                data={data}
                 designs={designs}
                 fetchProductDesigns={fetchProductDesigns}
                 setProductDesigns={setProductDesigns}
             />
 
-            <OrderTable
-                title="Other Orders"
-                description="A list of Orders."
-                headers={headers}
-                data={data}
-            />
         </div>
     );
 };

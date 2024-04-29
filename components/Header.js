@@ -12,8 +12,6 @@ const Header = () => {
           <nav>
             <ul className="flex">
               <li className="px-2"><Link href="https://pricepointwholesale.com/shop">Shop</Link></li>
-              <li className="px-2"><Link href="/designs">Designs</Link></li>
-              <li className="px-2"><Link href="/reseller">Reseller</Link></li>
               <li className="px-2"><Link href="https://pricepointwholesale.com/my-account">My Account</Link></li>
 
             {/* <li className="px-2">My Custom Orders</li> */}

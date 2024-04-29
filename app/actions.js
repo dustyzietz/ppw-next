@@ -41,13 +41,7 @@ export async function fetchOrdersForCurrentUser(id) {
     // fetch by customer
     customer: id,
 });
-  const customRes = await api.get("orders", {
-    per_page: 20,
-    // fetch by customer
-    customer: id,
-    category: 40,
-});
- return {orders: res.data, customOrders: customRes.data}
+ return {success: true, data: res.data}
 }
 
 export async function fetchUsers(token) {
@@ -207,7 +201,9 @@ const uploadBucket = process.env.BUCKET   // << LOOK!
    extension = 'jpg';
  }else if (type === 'image/png'){
    extension = 'png';
- }
+  }else if (type === 'application/pdf'){
+    extension = 'pdf';
+  }
   const result = await getUploadURL();
   const data = JSON.parse(result.body);
   return data;

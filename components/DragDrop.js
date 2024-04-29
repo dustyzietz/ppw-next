@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { getPresignedUrl } from "../app/actions"
+import ImageOrPdfPreview from "./ImageOrPdfPreview";
 
 
 const DragDrop = ({ imageUrl, setImageUrl, className }) => {
@@ -8,6 +9,7 @@ const DragDrop = ({ imageUrl, setImageUrl, className }) => {
   const MAX_IMAGE_SIZE = 5000000;
   const [image, setImage] = useState();
   const [type, setType] = useState("");
+  const [pdf, setPdf] = useState();
 
   //DROPZONE stuff
   const onDrop = useCallback((acceptedFiles) => {
@@ -19,16 +21,20 @@ const DragDrop = ({ imageUrl, setImageUrl, className }) => {
     if (!file.type) {
       return;
     }
+    if(file.type === 'application/pdf'){
+      setPdf(file);
+    }
     setType(file.type);
     let reader = new FileReader();
     reader.onload = (e) => {
       if (
         !e.target.result.includes("data:image/jpeg") &&
         !e.target.result.includes("data:image/png") &&
-        !e.target.result.includes("data:image/webp")
+        !e.target.result.includes("data:image/webp") &&
+        !e.target.result.includes("data:application/pdf")
       ) {
         setLoading(false);
-        return alert("Wrong file type - JPG or PNG only.");
+        return alert("Wrong file type - JPG, PNG, or PDF only.");
       }
       if (e.target.result.length > MAX_IMAGE_SIZE) {
         setLoading(false);
@@ -68,10 +74,10 @@ const DragDrop = ({ imageUrl, setImageUrl, className }) => {
   return (
     <>
       <div {...getRootProps()} className={className}>
-        <div style={{height:'140px', width:'250px'}} className=" mx-auto flex justify-center pt-5 pb-6 border border-black rounded-md">
-          {imageUrl && imageUrl.length > 0 ? (
-            <img src={imageUrl} alt="profile main cover" />
-          ) : (
+        <div style={{height:'260px', width:'260px'}} className=" mx-auto flex justify-center border border-black rounded-md">
+        {imageUrl && imageUrl.length > 0 ? (
+    <ImageOrPdfPreview pdf={pdf} imageUrl={imageUrl} />
+) : (
             <>
               {loading ? (
                 <div className="flex my-auto justify-center">
@@ -79,7 +85,7 @@ const DragDrop = ({ imageUrl, setImageUrl, className }) => {
                 </div>
                 
               ) : (
-                <div className="space-y-1 text-center">
+                <div className="space-y-1 pt-16 text-center">
                   <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     stroke="currentColor"
