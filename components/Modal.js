@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 
-const Modal = ({ open, setOpen, children }) => {
+const Modal = ({ open, setOpen, children, wide}) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed z-40 inset-0 overflow-y-auto" open={open} onClose={setOpen}>
@@ -32,7 +32,7 @@ const Modal = ({ open, setOpen, children }) => {
           >
             <div
               className={`inline-block align-bottom bg-white 
-              rounded-lg p-2 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle  max-w-3xl relative`}
+              rounded-lg p-2 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle  max-w-3xl ${wide ? 'max-w-6xl' : ''} relative`}
             >
               <button onClick={()=>setOpen(false)} className='float-right '>
                  X
