@@ -54,8 +54,8 @@ const AddTemplateModal = ({ product_id, template_id, oldTemplate, getTemplates }
       
     return (
         <>
-            <button onClick={() => setOpen(true)}>{template_id ? "Edit Template" : "Add Template" }</button>
-            <Modal open={open} setOpen={setOpen}>
+            <Button onClick={() => setOpen(true)} text={template_id ? "Edit Template" : "Add Template" } />
+            <Modal open={open} handleClose={() => setOpen(false)}>
               <div className="p-6">
                 <h1>{template_id ? "Edit Template" : "Add Template" }</h1>
                 <h2>Product ID: {product_id}</h2>

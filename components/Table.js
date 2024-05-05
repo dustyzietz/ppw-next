@@ -38,7 +38,7 @@ const Table = ({ title, description, headers, data }) => {
                                 {data?.map((order, i) => (
                                     <Fragment key={i}>
                                         <tr className="even:bg-gray-100">
-                                            {order.row.map((cell, i) => (
+                                            {order.map((cell, i) => (
                                                 <td key={i} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                                     {cell}
                                                 </td>

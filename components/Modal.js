@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
+import { XIcon } from "./utils/icons";
 
-const Modal = ({ open, setOpen, children, wide}) => {
+const Modal = ({ open, handleClose, children, wide}) => {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" static className="fixed z-40 inset-0 overflow-y-auto" open={open} onClose={setOpen}>
+      <Dialog as="div" static className="fixed z-40 inset-0 overflow-y-auto" open={open} onClose={handleClose}>
         <div className="flex items-center justify-center min-h-screen pt-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
@@ -34,8 +35,8 @@ const Modal = ({ open, setOpen, children, wide}) => {
               className={`inline-block align-bottom bg-white 
               rounded-lg p-2 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle  max-w-3xl ${wide ? 'max-w-6xl' : ''} relative`}
             >
-              <button onClick={()=>setOpen(false)} className='float-right '>
-                 X
+              <button onClick={handleClose} className='float-right '>
+                 {XIcon}
               </button>
               <div>{children}</div>
             </div>

@@ -10,11 +10,17 @@ import {
 	fetchCustomProducts,
 	fetchTemplates,
 } from "../actions";
+import { token } from "@/components/utils/helperFunctions";
 
-
-const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurrentDesign}) => {
-  console.log(currentDesign)
-  const initialDesign = {
+const DesignForm = ({
+	designs,
+	fetchTheDesigns,
+	currentDesign,
+	setOpen,
+	setCurrentDesign,
+  setLoading
+}) => {
+	const initialDesign = {
 		user_id: null,
 		email: "",
 		name: "",
@@ -24,56 +30,52 @@ const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurren
 		product_id: 0,
 	};
 
-  const [imageUrl, setImageUrl] = useState("");
-	const [newDesign, setNewDesign] = useState(currentDesign ? {...currentDesign, images: JSON.parse(currentDesign.images)} : initialDesign);
-  const [templates, setTemplates] = useState([]);
+	const [imageUrl, setImageUrl] = useState("");
+	const [newDesign, setNewDesign] = useState(
+		currentDesign
+			? { ...currentDesign, images: JSON.parse(currentDesign.images) }
+			: initialDesign
+	);
+	const [templates, setTemplates] = useState([]);
 	const [user, setUser] = useState(null);
 	const [products, setProducts] = useState(null);
 
-	let token;
-
 	useEffect(() => {
-		token = document.cookie
-			.split("; ")
-			?.find((row) => row.startsWith("token="))
-			?.split("=")[1];
-
 		async function fetchUser() {
-			const userData = await fetchCurrentUser(token);
-			setUser(userData);
-			setNewDesign({
-				...newDesign,
-				user_id: userData?.user_id,
-				email: userData?.email,
-			});
+			try {
+				const userData = await fetchCurrentUser(token());
+				setUser(userData);
+				setNewDesign({
+					...newDesign,
+					user_id: userData?.user_id,
+					email: userData?.email,
+				});
+			} catch (error) {
+				setLoading(false);
+				console.log(error);
+			}
 		}
 		fetchUser();
 
-		fetchTheDesigns();
-
 		async function fetchTheProducts() {
-      try {
-        const products = await fetchCustomProducts();
-       // console.log(products)
-        setProducts(products);
-      } catch (error) {
-        console.log(error)
-      }
-		
+			try {
+				const products = await fetchCustomProducts();
+				// console.log(products)
+				setProducts(products);
+			} catch (error) {
+				console.log(error);
+			}
 		}
 		fetchTheProducts();
 
 		async function fetchTheTemplates() {
-			const templates = await fetchTemplates(token);
+			const templates = await fetchTemplates(token());
 			setTemplates(templates);
 		}
 		fetchTheTemplates();
 	}, []);
 
-
-
-
-  useEffect(() => {
+	useEffect(() => {
 		// fetch the template linked to that product id.
 		if (newDesign.product_id) {
 			const template = templates.find(
@@ -83,7 +85,7 @@ const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurren
 		}
 	}, [newDesign.product_id]);
 
-  const handleSaveImage = () => {
+	const handleSaveImage = () => {
 		if (imageUrl?.length) {
 			const newImages = [...newDesign.images, imageUrl];
 			setNewDesign({ ...newDesign, images: newImages });
@@ -95,19 +97,18 @@ const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurren
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const token = document.cookie
-			.split("; ")
-			?.find((row) => row.startsWith("token="))
-			?.split("=")[1];
 
-		const res = await createDesign(token, {...newDesign, images: JSON.stringify(newDesign.images)});
+		const res = await createDesign(token(), {
+			...newDesign,
+			images: JSON.stringify(newDesign.images),
+		});
 		if (res.design_id || res?.message === "Design updated successfully.") {
 			setNewDesign(initialDesign);
 			fetchTheDesigns();
-      setCurrentDesign(null)
-      setOpen(false)
+			setCurrentDesign(null);
+			setOpen(false);
 		} else {
-      console.log(res)
+			console.log(res);
 			alert("Something went wrong");
 		}
 	};
@@ -128,8 +129,7 @@ const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurren
 		});
 	};
 
-	const {name, template, images, conversation, product_id } =
-		newDesign;
+	const { name, template, images, conversation, product_id } = newDesign;
 
 	return (
 		<form>
@@ -139,6 +139,7 @@ const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurren
 						? "Create your first design"
 						: "Create new design"}{" "}
 					<div className="float-right">
+          <Button className="mr-4" text="Cancel" onClick={() => {fetchTheDesigns();setCurrentDesign(null);setOpen(false)}} />
 						<Button onClick={handleSubmit} text="Submit" />
 					</div>
 				</h2>
@@ -239,16 +240,18 @@ const DesignForm = ({designs, fetchTheDesigns, currentDesign, setOpen, setCurren
 							Upload images.
 						</label>
 						<DragDrop imageUrl={imageUrl} setImageUrl={setImageUrl} />
+        
 						<Button onClick={handleSaveImage} text="Save" />
 					</div>
 				</div>
 
 				<div className="col-span-full">
 					<h2 className="text-xl font-semibold">Images </h2>
-					 {images && images.length && <ImageGallery images={images} />} 
+					{images && <ImageGallery images={images} />}
 				</div>
 
 				<div className="flex justify-end mt-8">
+        <Button className="mr-4" text="Cancel" onClick={() => {fetchTheDesigns();setCurrentDesign(null);setOpen(false)}} />
 					<Button onClick={handleSubmit} text="Submit" />
 				</div>
 			</div>

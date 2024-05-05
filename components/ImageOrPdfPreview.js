@@ -28,7 +28,7 @@ function ImageOrPdfPreview({ imageUrl, pdf }) {
        <PDFViewer pdfUrl={imageUrl} />
     ) : (
         // Render image component
-        <Image src={imageUrl} height={260} width={260} alt="profile main cover" />
+        <img src={imageUrl} height={260} width={260} alt="profile main cover" />
     );
 }
 

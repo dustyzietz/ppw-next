@@ -10,7 +10,8 @@ const OrderTable = ({
 	data,
 	designs,
 	fetchProductDesigns,
-  setProductDesigns
+  setProductDesigns,
+  customProducts
 }) => {
 
 	const token = () =>
@@ -75,7 +76,7 @@ const OrderTable = ({
 						<tbody className="bg-white">
 							{data?.map((order, i) => (
 								<Fragment key={i}>
-									<tr className="even:bg-gray-100">
+									<tr className="bg-gray-100">
 										{order.row.map((cell, i) => (
 											<td
 												key={i}
@@ -86,7 +87,10 @@ const OrderTable = ({
 										))}
 									</tr>
 									{order.lineItems.map((lineItem, i) => {
-										return <LineItem key={i} lineItem={lineItem} designs={designs} i={i} handleLinkDesign={handleLinkDesign} />;
+                   if(customProducts.some(product => product.id === lineItem.product_id)) {
+                    // TODO need to detect if lineItem is custom
+                    return <LineItem key={i} lineItem={lineItem} designs={designs} i={i} handleLinkDesign={handleLinkDesign} />;
+                   }
 									})}
 								</Fragment>
 							))}

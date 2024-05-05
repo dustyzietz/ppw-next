@@ -6,12 +6,12 @@ const LineItem = ({ lineItem, designs, i, handleLinkDesign }) => {
 	const [open, setOpen] = useState(false);
 	return (
 		<tr key={i}>
+			
 			<td colSpan={5}>
-				<div className="bg-blue-100">
-					<div className="flex justify-between">
-						<div>ID: {lineItem.id}</div>
-						<div>Name: {lineItem.name}</div>
-						<div>Product ID: {lineItem.product_id}</div>
+				<div className="border border-gray-400">
+					<div className="flex justify-between items-center">
+          <img src={lineItem.image.src} alt={lineItem.name} className="w-16 h-16 m-1" />
+						<div> {lineItem.name}</div>
 						<div>Quantity: {lineItem.quantity}</div>
 						<div>
 							{lineItem.designData ? (

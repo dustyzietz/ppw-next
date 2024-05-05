@@ -52,7 +52,8 @@ export async function fetchOrdersForCurrentUser(id) {
 		}
 		return { success: true, data: res.data };
 	} catch (error) {
-		return { success: false, error: error.message };
+    console.log(error)
+    return error
 	}
 }
 
@@ -113,8 +114,8 @@ export async function fetchCurrentUser(token) {
 		const body = await res.json();
 		return body;
 	} catch (error) {
-		console.log(error);
-		return { error: error.message };
+    console.log(error)
+    return error
 	}
 }
 
@@ -140,7 +141,8 @@ export async function fetchDesigns(token) {
 		}
 		return { success: true, data: body };
 	} catch (error) {
-		return { error: error.message };
+    console.log(error)
+    return error
 	}
 }
 
@@ -158,7 +160,8 @@ export async function fetchProductDesigns(token) {
 		const body = await res.json();
 		return body;
 	} catch (error) {
-		throw new Error(`This is error is in the Server Action`);
+    console.log(error)
+    return error
 	}
 }
 
@@ -228,7 +231,25 @@ export async function updateTemplate(token, data) {
 }
 // RESELLER
 
-export async function fetchresellers(token) {
+export async function fetchAllResellers(token) {
+	try{
+	const res = await fetch(
+		"https://pricepointwholesale.com/wp-json/custom/v1/resellers-all",
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
+	const body = await res.json();
+		return {success: true, data: body};
+	} catch (error) {
+		console.log(error);
+    return error
+	}
+}
+
+export async function fetchReseller(token) {
 	try{
 	const res = await fetch(
 		"https://pricepointwholesale.com/wp-json/custom/v1/resellers",
@@ -239,10 +260,10 @@ export async function fetchresellers(token) {
 		}
 	);
 	const body = await res.json();
-		return body;
+		return {success: true, data: body};
 	} catch (error) {
-		console.log(error);
-    return {error: error.message}
+	  console.log(error)
+    return error
 	}
 }
 
@@ -260,10 +281,10 @@ export async function addReseller(token, data) {
 		}
 	);
 	const body = await res.json();
-		return body;
+		return {success: true, data: body};
 	} catch (error) {
-		console.log(error);
-		return { error: error.message };
+    console.log(error)
+    return error
 	}
 }
 
@@ -281,10 +302,10 @@ export async function updateReseller(token, data) {
 		}
 	);
 	const body = await res.json();
-		return body;
+		return {success: true, data: body};
 	} catch (error) {
-		console.log(error);
-		return { error: error.message };
+	  console.log(error)
+    return error
 	}
 }
 
@@ -308,8 +329,8 @@ export async function deleteReseller(token, id) {
 	const body = await res.json();
 		return body;
 	} catch (error) {
-		console.log(error);
-		return { error: error.message };
+	  console.log(error)
+    return error
 	}
 }
 

@@ -101,7 +101,7 @@ export default function Home() {
                     ]}
                 />
                 <div className="text-center my-6 w-full">
-                    <Link href="/reseller-application">
+                    <Link href="/reseller">
                         <Button text="Apply Now" />
                     </Link>
                 </div>
@@ -126,9 +126,9 @@ export default function Home() {
             Stay Organized and Informed</h2>
 <p>Welcome to your personalized hub for managing your custom orders and Reseller Application status. Keep track of your designs, monitor the progress of your orders, and stay updated on your Reseller Application all in one convenient location.</p>
 
- <div className="my-8 text-center" ><Link href="/account#orders" ><Button text="View Orders" /></Link></div> 
+ <div className="my-8 text-center" ><Link href="/orders" ><Button text="View Orders" /></Link></div> 
 
-  <div className="my-8 text-center" ><Link  href="/account#application"><Button text="Application Status" /></Link></div>
+  <div className="my-8 text-center" ><Link  href="/reseller"><Button text="Application Status" /></Link></div>
 
 
 <List

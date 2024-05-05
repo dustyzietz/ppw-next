@@ -6,6 +6,7 @@ import {
 	fetchCurrentUser,
 	fetchDesigns,
 	fetchProductDesigns,
+  fetchCustomProducts,
 } from "../actions";
 import Link from "next/link";
 import OrderTable from "@/components/OrderTable";
@@ -16,6 +17,7 @@ const Orders = () => {
 	const [orders, setOrders] = useState(null);
 	const [designs, setDesigns] = useState([]);
 	const [productDesigns, setProductDesigns] = useState([]);
+  const [customProducts, setCustomProducts] = useState([]);
 
 	const token = () =>
 		document.cookie
@@ -49,9 +51,6 @@ const Orders = () => {
               window.location.href = "https://pricepointwholesale.com/my-account";
             }
           }
-          
-  
-         
         } catch (error) {
           console.log(error);
           alert("Error");
@@ -96,17 +95,30 @@ const Orders = () => {
 				alert("Error");
 			}
 		}
+    async function handleFetchCustomProducts() {
+      try {
+        const customProductData = await fetchCustomProducts(token());
+        setCustomProducts(customProductData);
+      } catch (error) {
+        console.log(error);
+        alert("Error");
+      }
+    }
 
 		if (!productDesigns.length) {
 			handleFetchProductDesigns();
 		}
+    if (!customProducts.length) {
+      handleFetchCustomProducts();
+    }
+
 	}, []);
 
 	const headers = ["Order", "Date", "Status", "Total"];
 
 	const data = orders?.map((order) => ({
 		row: [
-			order?.id,
+			<a className="text-blue-600 text-lg underline" href={`https://pricepointwholesale.com/my-account/view-order/${order?.id}`}>View</a>,
 			dayjs(order?.date_created).format("MMMM DD, YYYY"),
 			`${order?.status} for ${order.line_items.length} items`,
 			order.total,
@@ -144,6 +156,7 @@ const Orders = () => {
 					designs={designs}
 					fetchProductDesigns={fetchProductDesigns}
 					setProductDesigns={setProductDesigns}
+          customProducts={customProducts}
 				/>
 			)}
 		</div>
