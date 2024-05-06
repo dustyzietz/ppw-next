@@ -71,35 +71,6 @@ export async function fetchUsers(token) {
 	return body;
 }
 
-// export async function fetchCurrentUser(token) {
-//   // fetch users from Wordpress rest api
-//   const res = await fetch('https://pricepointwholesale.com/wp-json/wp/v2/users/me', {
-//     headers: {
-//         Authorization: `Bearer ${token}`
-//     }
-//   });
-//     const body = await res.json();
-//   return {id: body.id, name: body.name, is_super_admin: body.is_super_admin}
-// }
-
-export async function createDesign(token, design) {
-	const res = await fetch(
-		`https://pricepointwholesale.com/wp-json/custom/v1/${
-			design.Id ? "update-design/" + design.Id : "add-design"
-		}`,
-		{
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${token}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(design),
-		}
-	);
-	const body = await res.json();
-	return body;
-}
-
 export async function fetchCurrentUser(token) {
 	// fetch users from Wordpress rest api
 	try {
@@ -117,6 +88,25 @@ export async function fetchCurrentUser(token) {
     console.log(error)
     return error
 	}
+}
+
+// DESIGNS
+export async function createDesign(token, design) {
+	const res = await fetch(
+		`https://pricepointwholesale.com/wp-json/custom/v1/${
+			design.Id ? "update-design/" + design.Id : "add-design"
+		}`,
+		{
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(design),
+		}
+	);
+	const body = await res.json();
+	return body;
 }
 
 export async function fetchDesigns(token) {
@@ -145,6 +135,23 @@ export async function fetchDesigns(token) {
     return error
 	}
 }
+
+export const deleteDesign = async (token, id) => {
+  const res = await fetch(
+    `https://pricepointwholesale.com/wp-json/custom/v1/delete-design/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const body = await res.json();
+  return body;
+}
+
+
+//PRODUCT DESIGNS
 
 export async function fetchProductDesigns(token) {
 	try {

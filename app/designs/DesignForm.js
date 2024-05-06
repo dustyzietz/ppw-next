@@ -9,6 +9,7 @@ import {
 	fetchCurrentUser,
 	fetchCustomProducts,
 	fetchTemplates,
+  deleteDesign
 } from "../actions";
 import { token } from "@/components/utils/helperFunctions";
 
@@ -128,6 +129,22 @@ const DesignForm = ({
 			],
 		});
 	};
+
+  const handleDelete = async () => {
+    if(confirm("Are you sure you want to delete this design?")) {
+      try {
+        const res = await deleteDesign(token(), currentDesign.Id);
+        setNewDesign(initialDesign);
+        fetchTheDesigns();
+        setCurrentDesign(null);
+        setOpen(false);
+      } catch (error) {
+        alert("Something went wrong")
+        console.log(error)
+      }
+ 
+    }
+  }
 
 	const { name, template, images, conversation, product_id } = newDesign;
 
@@ -251,6 +268,7 @@ const DesignForm = ({
 				</div>
 
 				<div className="flex justify-end mt-8">
+          <Button text="Delete" onClick={handleDelete} className="mr-4" />
         <Button className="mr-4" text="Cancel" onClick={() => {fetchTheDesigns();setCurrentDesign(null);setOpen(false)}} />
 					<Button onClick={handleSubmit} text="Submit" />
 				</div>

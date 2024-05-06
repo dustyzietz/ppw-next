@@ -676,6 +676,13 @@ function delete_product_design($request)
 
 // Step 1: Register Custom Routes
 function register_resellers_routes() {
+        register_rest_route( 'custom/v1', '/resellers-all', array(
+        array(
+            'methods'  => WP_REST_Server::READABLE,
+            'callback' => 'get_all_resellers',
+        ),
+    ));
+    
     register_rest_route( 'custom/v1', '/resellers', array(
         array(
             'methods'  => WP_REST_Server::READABLE,
@@ -706,7 +713,7 @@ function resellers_permissions_check() {
     return true;
 }
 
-function get_resellers( $request ) {
+function get_all_resellers( $request ) {
     // Step 3: Access the Database
     global $wpdb;
     $table_name ='8q1_resellers';
@@ -715,6 +722,26 @@ function get_resellers( $request ) {
     $resellers = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
 
     return rest_ensure_response( $resellers );
+}
+
+function get_resellers( $request ) {
+    global $wpdb;
+    $table_name ='8q1_resellers';
+
+    // Step 4: Implement CRUD Operations
+    $current_user = wp_get_current_user();
+    if ( $current_user->ID == 0 ) {
+        return new WP_Error( 'not_logged_in', 'User not logged in', array( 'status' => 401 ) );
+    }
+
+    $user_id = $current_user->ID;
+    $reseller = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %d", $user_id ), ARRAY_A );
+
+    if ( empty( $reseller ) ) {
+        return new WP_Error( 'no_reseller_found', 'No reseller found for the current user', array( 'status' => 404 ) );
+    }
+
+    return rest_ensure_response( $reseller );
 }
 
 function add_reseller( $request ) {

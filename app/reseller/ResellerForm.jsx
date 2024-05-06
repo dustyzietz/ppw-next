@@ -134,9 +134,6 @@ const ResellerForm = () => {
 								/>
 								<Button text="Submit" onClick={handleSubmit} />
 							</div>
-							<Link href="https://pricepointwholesale.com/my-account">
-								<p className="pt-4 text-blue-600">Back to My Account</p>
-							</Link>
 							<form>
 								<div className="space-y-12">
 									<div className="border-b border-gray-900/10 pb-12">
@@ -244,7 +241,7 @@ const ResellerForm = () => {
 					) : (
 						<>
 							<h2 className="text-xl font-semibold py-4">Status: {formData.status}</h2>
-              {formData?.message && <p className="text-red-700 mb-4">{formData.message}</p>}
+              {formData?.message && <p className="text-purple-700 mb-4">{formData.message}</p>}
 							<Button text="Edit" onClick={() => setOpen(true)} />
 						</>
 					)}

@@ -85,9 +85,13 @@ const page = () => {
 					
 
 						{console.log(JSON.parse(design.images))}
-						{JSON.parse(design.images).map((image, index) => (
-							<img src={image} alt="Template" className="w-12 h-12" />
-						))}
+						{JSON.parse(design.images).map((image, index) => {
+              if(image.endsWith(".pdf")) {
+                return <PDFLink pdfUrl={image} />
+              } else {
+                return <img src={image} alt="Template" className="w-12 h-12" />
+              }
+						})}
 						<div className=" justify-end">
 							<Button
 								onClick={() => {
