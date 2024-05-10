@@ -95,9 +95,9 @@ get_header();
   -->
     <div class="form">
       <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'Login')">Login</button>
-        <button class="tablinks" onclick="openTab(event, 'Register')">Register</button>
-        <button class="tablinks" onclick="openTab(event, 'Forgot Password')">Forgot Password</button>
+        <button class="tablinks active" data-target="#Login" onclick="openTab('Login')">Login</button>
+        <button class="tablinks" data-target="#Register" onclick="openTab('Register')">Register</button>
+        <button class="tablinks" data-target="#Forgot Password" onclick="openTab('Forgot Password')">Forgot Password</button>
       </div>
 
       <div id="Login" class="tabcontent" style="display: block">
@@ -127,11 +127,12 @@ get_header();
         </form>
       </div>
       <div id="Register" class="tabcontent">
+        <div id="register-message" style="display: none; color: green;">
+          <h3>Please check your email for verification.</h3>
+        </div>
         <h3>Register</h3>
         <p>Register a new account</p>
-        <div id="register-message" style="display: none;">
-          <p>Please check your email for verification.</p>
-        </div>
+
         <form id="custom-register-form" method="post" action="<?php echo esc_url(wp_registration_url()); ?>" class="wp-user-form">
           <div class="username">
             <label for="user_register">Username: </label>
@@ -157,104 +158,137 @@ get_header();
       </div>
     </div>
 
-    <script>
-      function openTab(event, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tabcontent.length; i++) {
-          tabcontent[i].style.display = "none";
-        }
-        for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        event.currentTarget.className += " active";
-      }
-    </script>
-
   <?php } else { // is logged in 
     wp_redirect(home_url('/my-account'));
   } ?>
 </div>
 
 <script>
+  if (window.location.search.includes('checkemail=registered')) {
+    openTab('Register');
+    document.getElementById('register-message').style.display = 'block';
+  }
+
+  function openTab(tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    document.querySelector(`.tablinks[data-target="#${tabName}"]`).classList.add('active');
+  }
+
   function customLogin(event) {
+    console.log('customLogin');
     event.preventDefault(); // Prevent the default form submission
 
     // Extract username and password from the form
     var username = document.getElementById("user_login").value;
     var password = document.getElementById("user_pass").value;
+    console.log('customLogin2');
 
     // Make an AJAX request to the WordPress JWT authentication endpoint
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '<?php echo esc_url_raw(rest_url("jwt-auth/v1/token")); ?>', true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        var response = JSON.parse(xhr.responseText);
-        if (response.token) {
-          // Send token to WordPress endpoint
-          var xhr2 = new XMLHttpRequest();
-          xhr2.open("POST", "https://pricepointwholesale.com/wp-json/custom/v1/encrypt-token", true);
-          xhr2.setRequestHeader("Content-Type", "application/json");
-          xhr2.onreadystatechange = function() {
-            if (xhr2.readyState === XMLHttpRequest.DONE) {
-              if (xhr2.status === 200) {
-                console.log("Token encrypted and set as cookie successfully");
-              } else {
-                console.error("Error encrypting token and setting cookie");
-              }
+        console.log('customLogin3');
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.token) {
+                // Send token to WordPress endpoint
+                var xhr2 = new XMLHttpRequest();
+                xhr2.open("POST", "https://pricepointwholesale.com/wp-json/custom/v1/encrypt-token", true);
+                xhr2.setRequestHeader("Content-Type", "application/json");
+                xhr2.onreadystatechange = function() {
+                    if (xhr2.readyState === XMLHttpRequest.DONE) {
+                        if (xhr2.status === 200) {
+                            console.log("Token encrypted and set as cookie successfully");
+                            // Form submission via AJAX
+                            var formData = new FormData(document.getElementById("custom-login-form"));
+                            var xhr3 = new XMLHttpRequest();
+                            xhr3.open("POST", "<?php echo esc_url_raw(admin_url('admin-ajax.php')); ?>", true);
+                            xhr3.setRequestHeader("Accept", "application/json");
+                            formData.append('action', 'custom_login');
+                            xhr3.onreadystatechange = function() {
+                                if (xhr3.readyState === XMLHttpRequest.DONE) {
+                                    if (xhr3.status === 200) {
+                                        var responseData = JSON.parse(xhr3.responseText);
+                                        if (responseData.success) {
+                                            // Form submitted successfully, handle success case
+                                            alert("Login successful!");
+                                            // Optionally, redirect to another page
+                                            window.location.href = "<?php echo esc_url(home_url('/')); ?>";
+                                        } else {
+                                            // Form submission failed, handle error case
+                                            alert("Error: " + responseData.data.message);
+                                        }
+                                    } else {
+                                        alert("Error: Unable to connect to the server");
+                                    }
+                                }
+                            };
+                            xhr3.send(formData);
+                        } else {
+                            console.error("Error encrypting token and setting cookie");
+                        }
+                    }
+                };
+                xhr2.send(JSON.stringify({
+                    token: response.token
+                }));
+            } else {
+                alert("Error: Unable to obtain token");
             }
-          };
-          xhr2.send(JSON.stringify({
-            token: response.token
-          }));
         } else {
-          alert("Error: Unable to obtain token");
+            alert("Error: Unable to connect to the server");
         }
-      } else {
-        alert("Error: Unable to connect to the server");
-      }
     };
     xhr.onerror = function() {
-      alert("Error: Unable to connect to the server");
+        alert("Error: Unable to connect to the server");
     };
     xhr.send(
-      JSON.stringify({
-        username: username,
-        password: password,
-      })
+        JSON.stringify({
+            username: username,
+            password: password,
+        })
     );
+    console.log('customLogin4');
+}
 
-    // Manually submit the form after executing the custom function
-    document.getElementById("custom-login-form").submit();
-  }
 
-  document.addEventListener("DOMContentLoaded", function() {
-    // Check if the URL contains the parameter 'checkemail' with value 'registered'
-    const urlParams = new URLSearchParams(window.location.search);
-    const checkEmailParam = urlParams.get('checkemail');
-    if (checkEmailParam === 'registered') {
-      // Programmatically click on the "Register" tab
-      document.querySelector('.tablinks[data-target="#Register"]').click();
-      // Display the message to check email
-      document.getElementById('register-message').style.display = 'block';
-    }
 
-    // Add event listeners for tab switching
-    const tabs = document.querySelectorAll('.tablinks');
-    const tabContents = document.querySelectorAll('.tabcontent');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        const target = this.getAttribute('data-target');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        tabContents.forEach(tabContent => tabContent.style.display = 'none');
-        this.classList.add('active');
-        document.querySelector(target).style.display = 'block';
-      });
+  function submitRegistration() {
+    // Get form data
+    var formData = {
+      'user_login': jQuery('#user_register').val(),
+      'user_email': jQuery('#email_register').val(),
+      // Add additional fields here if needed
+      'action': 'custom_register' // Action to handle registration in WordPress
+    };
+
+    // Submit form via AJAX
+    jQuery.ajax({
+      type: 'POST',
+      url: '<?php echo esc_url(admin_url('admin-ajax.php')); ?>',
+      data: formData,
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          // Registration successful, display success message or perform any other action
+          alert('Registration successful!');
+        } else {
+          // Display error message
+          jQuery('#register-error').html(response.data.message).show();
+        }
+      }
     });
-  });
+  }
 </script>
 <?php
 get_footer();
