@@ -88,11 +88,7 @@ get_header();
         margin-bottom: 20px;
       }
     </style>
-    <!-- form with 3 tabs: login, register, forgot password
-  Login has 3 fields username password and remember me
-  Registration has 2 fields: username and email
-  Forgot password has 1 field: email
-  -->
+ 
     <div class="form">
       <div class="tab">
         <button class="tablinks active" data-target="#Login" onclick="openTab('Login')">Login</button>
@@ -106,11 +102,11 @@ get_header();
         <form id="custom-login-form" method="post" action="<?php bloginfo('url') ?>/wp-login.php" class="wp-user-form">
           <div class="username">
             <label for="user_login">Username: </label>
-            <input type="text" name="log" value="<?php echo esc_attr(stripslashes($user_login)); ?>" size="20" id="user_login" tabindex="11" />
+            <input required type="text" name="log" value="<?php echo esc_attr(stripslashes($user_login)); ?>" size="20" id="user_login" tabindex="11" />
           </div>
           <div class="password">
             <label for="user_pass">Password: </label>
-            <input type="password" name="pwd" value="" size="20" id="user_pass" tabindex="12" />
+            <input required type="password" name="pwd" value="" size="20" id="user_pass" tabindex="12" />
           </div>
           <div class="login_fields">
             <div class="rememberme">
@@ -136,11 +132,11 @@ get_header();
         <form id="custom-register-form" method="post" action="<?php echo esc_url(wp_registration_url()); ?>" class="wp-user-form">
           <div class="username">
             <label for="user_register">Username: </label>
-            <input type="text" name="user_login" id="user_register" placeholder="Username" />
+            <input required type="text" name="user_login" id="user_register" placeholder="Username" />
           </div>
           <div class="email">
             <label for="email_register">Email: </label>
-            <input type="email" name="user_email" id="email_register" placeholder="Email" />
+            <input required type="email" name="user_email" id="email_register" placeholder="Email" />
           </div>
           <!-- Add additional fields for registration if needed -->
           <button type="submit">Register</button>
@@ -151,8 +147,8 @@ get_header();
       <div id="Forgot Password" class="tabcontent">
         <h3>Forgot Password</h3>
         <p>Forgot your password?</p>
-        <form action="forgot-password">
-          <input type="email" name="email" id="email" placeholder="Email" />
+        <form id="forgot-password-form">
+          <input required type="email" name="email" id="email" placeholder="Email" />
           <button type="submit">Forgot Password</button>
         </form>
       </div>
@@ -184,20 +180,17 @@ get_header();
   }
 
   function customLogin(event) {
-    console.log('customLogin');
     event.preventDefault(); // Prevent the default form submission
 
     // Extract username and password from the form
     var username = document.getElementById("user_login").value;
     var password = document.getElementById("user_pass").value;
-    console.log('customLogin2');
 
     // Make an AJAX request to the WordPress JWT authentication endpoint
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '<?php echo esc_url_raw(rest_url("jwt-auth/v1/token")); ?>', true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function() {
-        console.log('customLogin3');
         if (xhr.status >= 200 && xhr.status < 300) {
             var response = JSON.parse(xhr.responseText);
             if (response.token) {
@@ -208,7 +201,6 @@ get_header();
                 xhr2.onreadystatechange = function() {
                     if (xhr2.readyState === XMLHttpRequest.DONE) {
                         if (xhr2.status === 200) {
-                            console.log("Token encrypted and set as cookie successfully");
                             // Form submission via AJAX
                             var formData = new FormData(document.getElementById("custom-login-form"));
                             var xhr3 = new XMLHttpRequest();
@@ -219,16 +211,15 @@ get_header();
                                 if (xhr3.readyState === XMLHttpRequest.DONE) {
                                     if (xhr3.status === 200) {
                                         var responseData = JSON.parse(xhr3.responseText);
-                                        if (responseData.success) {
-                                            // Form submitted successfully, handle success case
-                                            alert("Login successful!");
-                                            // Optionally, redirect to another page
-                                            window.location.href = "<?php echo esc_url(home_url('/')); ?>";
-                                        } else {
-                                            // Form submission failed, handle error case
+                                        if (!responseData.success) {
+                                            // Form submission failed, display error message from the server
                                             alert("Error: " + responseData.data.message);
+                                        }else{
+                                          // redirect to /my-account
+                                          window.location.href = "<?php echo esc_url(home_url('/my-account')); ?>";
                                         }
                                     } else {
+                                        // Error: Unable to connect to the server
                                         alert("Error: Unable to connect to the server");
                                     }
                                 }
@@ -245,11 +236,15 @@ get_header();
             } else {
                 alert("Error: Unable to obtain token");
             }
+        } else if (xhr.status === 403) {
+          alert("Error: Invalid username or password");
         } else {
+            // Error: Unable to connect to the server
             alert("Error: Unable to connect to the server");
         }
     };
     xhr.onerror = function() {
+        // Error: Unable to connect to the server
         alert("Error: Unable to connect to the server");
     };
     xhr.send(
@@ -258,10 +253,7 @@ get_header();
             password: password,
         })
     );
-    console.log('customLogin4');
 }
-
-
 
   function submitRegistration() {
     // Get form data
@@ -289,6 +281,31 @@ get_header();
       }
     });
   }
+
+  document.getElementById("forgot-password-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get the email entered by the user
+    var email = document.getElementById("email").value;
+
+    // Make an AJAX request to the WordPress reset password endpoint
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "<?php echo esc_url(site_url('wp-login.php?action=lostpassword', 'login_post')); ?>", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          // Password reset email sent successfully
+          alert("Password reset email sent. Please check your email.");
+        } else {
+          // Error: Unable to send password reset email
+          alert("Error: Unable to send password reset email. Please try again later.");
+        }
+      }
+    };
+    xhr.send("user_login=" + email + "&redirect_to=<?php echo esc_url(home_url('/')); ?>");
+  });
+  
 </script>
 <?php
 get_footer();
