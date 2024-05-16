@@ -12,6 +12,7 @@ import {
   deleteDesign
 } from "../actions";
 import { token } from "@/components/utils/helperFunctions";
+import ChatBubbles from "@/components/ChatBubbles";
 
 const DesignForm = ({
 	designs,
@@ -225,7 +226,11 @@ const DesignForm = ({
 					</div>
 
 					<div className="col-span-full">
-						<label
+            {currentDesign ? (
+              <ChatBubbles />
+            ) : (
+              <>
+              <label
 							htmlFor="about"
 							className="block text-sm font-medium leading-6 text-gray-900"
 						>
@@ -246,7 +251,9 @@ const DesignForm = ({
 						<p className="mt-3 text-sm leading-6 text-gray-600">
 							Write a few sentences about your custom product design
 							requirements.
-						</p>
+						</p></>
+            )}
+						
 					</div>
 
 					<div className="col-span-full">
