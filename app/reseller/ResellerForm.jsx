@@ -138,12 +138,13 @@ const ResellerForm = () => {
 								<div className="space-y-12">
 									<div className="border-b border-gray-900/10 pb-12">
 										<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                      {/* company name and address fields in dropdown take out message */}
 											<div className="sm:col-span-4">
 												<label
 													htmlFor="username"
 													className="block text-sm font-medium leading-6 text-gray-900"
 												>
-													Store Name
+													Company Name
 												</label>
 												<div className="mt-2">
 													<div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">

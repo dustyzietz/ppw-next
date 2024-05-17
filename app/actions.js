@@ -341,6 +341,29 @@ export async function deleteReseller(token, id) {
 	}
 }
 
+// MESSAGES 
+
+export async function createMessage(token, data) {
+  try{
+	const res = await fetch(
+		"https://pricepointwholesale.com/wp-json/custom/v1/messages",
+		{
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		}
+	);
+	const body = await res.json();
+		return {success: true, data: body};
+	} catch (error) {
+    console.log(error)
+    return error
+	}
+}
+
 // UPLOAD
 const AWS = require("aws-sdk");
 AWS.config.update({

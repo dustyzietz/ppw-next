@@ -11,7 +11,7 @@ import ImageOrPdfPreview from "@/components/ImageOrPdfPreview";
 import PDFLink from "@/components/PDFLink";
 
 const page = () => {
-	const [designs, setDesigns] = useState([]);
+	const [designs, setDesigns] = useState(null);
 	const [open, setOpen] = useState(false);
 	const [currentDesign, setCurrentDesign] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -25,7 +25,12 @@ const page = () => {
 		try {
 			const designs = await fetchDesigns(token());
 			if (designs?.success) {
-				setDesigns(designs?.data);
+        if(Array.isArray(designs?.data)) {
+          setDesigns(designs?.data);
+        } else{
+          console.log(designs)
+          setDesigns([]);
+        }
 			} else {
 				console.log(designs);
 				if (designs?.error.includes("jwt_auth_invalid_token")) {
@@ -39,7 +44,7 @@ const page = () => {
 		}
 	}
 	useEffect(() => {
-		if (!designs.length) {
+		if (!designs) {
 			fetchTheDesigns();
 		}
 	}, [designs]);
@@ -55,7 +60,7 @@ const page = () => {
 			<Button
 				className="mt-4"
 				text={
-					designs.length < 1 ? "Create your first design" : "Create new design"
+					designs?.length < 1 ? "Create your first design" : "Create new design"
 				}
 				onClick={() => setOpen(true)}
 			/>
@@ -73,8 +78,9 @@ const page = () => {
 				Existing Designs
 			</h2>
 			<div className=" gap-4 mt-4">
-				{loading && designs.length < 1 && "Loading..."}
-				{designs?.map((design, index) => (
+				{loading && !designs && "Loading..."}
+         {designs && designs.length < 1 && "No designs yet"}
+				 {designs?.map((design, index) => (
 					<div
 						key={index}
 						className="bg-white shadow-md rounded-lg p-4 flex justify-between"
@@ -83,9 +89,7 @@ const page = () => {
 							{design.name}
 						</h3>
 					
-
-						{console.log(JSON.parse(design.images))}
-						{JSON.parse(design.images).map((image, index) => {
+            {design && design.images && typeof design.images === 'string' && JSON.parse(design.images).map((image, index) => {
               if(image.endsWith(".pdf")) {
                 return <PDFLink pdfUrl={image} />
               } else {
@@ -102,7 +106,7 @@ const page = () => {
 							/>
 						</div>
 					</div>
-				))}
+				))} 
 			</div>
 		</div>
 	);

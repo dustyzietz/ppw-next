@@ -33,7 +33,7 @@ const Modal = ({ open, handleClose, children, wide}) => {
           >
             <div
               className={`inline-block align-bottom bg-white 
-              rounded-lg p-2 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle  max-w-3xl ${wide ? 'max-w-6xl' : ''} relative`}
+              rounded-lg p-2 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle  max-w-3xl ${wide ? 'max-w-6xl w-full' : ''} relative`}
             >
               <button onClick={handleClose} className='float-right '>
                  {XIcon}

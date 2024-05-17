@@ -9,7 +9,8 @@ import {
 	fetchCurrentUser,
 	fetchCustomProducts,
 	fetchTemplates,
-  deleteDesign
+  deleteDesign,
+  createMessage
 } from "../actions";
 import { token } from "@/components/utils/helperFunctions";
 import ChatBubbles from "@/components/ChatBubbles";
@@ -41,6 +42,7 @@ const DesignForm = ({
 	const [templates, setTemplates] = useState([]);
 	const [user, setUser] = useState(null);
 	const [products, setProducts] = useState(null);
+  const [message, setMessage] = useState("");
 
 	useEffect(() => {
 		async function fetchUser() {
@@ -105,6 +107,25 @@ const DesignForm = ({
 			images: JSON.stringify(newDesign.images),
 		});
 		if (res.design_id || res?.message === "Design updated successfully.") {
+      // create message
+      const messageRes = await createMessage(token(), {
+        design_id: res.design_id,
+        message: message,
+        from_admin: false,
+        new: true,
+        user_id: newDesign.user_id
+      })
+
+      try {
+        if(messageRes.success) {
+          console.log("Message sent successfully")
+        } else {
+          console.log("Something went wrong")
+        }
+      } catch (error) {
+        console.log(error)
+      }
+  
 			setNewDesign(initialDesign);
 			fetchTheDesigns();
 			setCurrentDesign(null);
@@ -117,18 +138,6 @@ const DesignForm = ({
 
 	const onChange = (e) => {
 		setNewDesign({ ...newDesign, [e.target.name]: e.target.value });
-	};
-
-	const updateConversation = (e) => {
-		setNewDesign({
-			...newDesign,
-			conversation: [
-				{
-					user_id: newDesign.user_id,
-					text: e.target.value,
-				},
-			],
-		});
 	};
 
   const handleDelete = async () => {
@@ -209,51 +218,13 @@ const DesignForm = ({
 						</div>
 					</div>
 
-					<div className="bg-blue-100 sm:col-span-4">
-						{!template && (
-							<p>
-								Once Template selected the template and product dimensions will
-								be displayed here.
-								<br />
-								Also there will be a button to download the template pdf.
-							</p>
-						)}
+					<div className="sm:col-span-4">
+						
 						{template && <ImageOrPdfPreview imageUrl={template} />}
 						{/* if image is pdf then show PDFLink */}
 						{template && template.endsWith(".pdf") && (
 							<PDFLink pdfUrl={template} />
 						)}
-					</div>
-
-					<div className="col-span-full">
-            {currentDesign ? (
-              <ChatBubbles />
-            ) : (
-              <>
-              <label
-							htmlFor="about"
-							className="block text-sm font-medium leading-6 text-gray-900"
-						>
-							About
-						</label>
-						<div className="mt-2">
-							<textarea
-								id="about"
-								name="about"
-								rows={3}
-								value={conversation[0]?.text}
-								onChange={(e) => updateConversation(e)}
-								className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-								defaultValue={""}
-								placeholder="Tell us about your design."
-							/>
-						</div>
-						<p className="mt-3 text-sm leading-6 text-gray-600">
-							Write a few sentences about your custom product design
-							requirements.
-						</p></>
-            )}
-						
 					</div>
 
 					<div className="col-span-full">
@@ -273,6 +244,32 @@ const DesignForm = ({
 					<h2 className="text-xl font-semibold">Images </h2>
 					{images && <ImageGallery images={images} />}
 				</div>
+
+        <div className="col-span-full">
+            {currentDesign ? (
+              <ChatBubbles />
+            ) : (
+              <>
+              <label
+							htmlFor="message"
+							className="block text-sm font-medium leading-6 text-gray-900"
+						>
+							About
+						</label>
+						<div className="mt-2">
+							<textarea
+								id="message"
+								name="message"
+								rows={3}
+								value={message}
+								onChange={(e) => setMessage(e.target.value)}
+								className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+								placeholder="Tell us about your design."
+							/>
+						</div>
+						</>
+            )}
+					</div>
 
 				<div className="flex justify-end mt-8">
           <Button text="Delete" onClick={handleDelete} className="mr-4" />
