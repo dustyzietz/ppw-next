@@ -1,5 +1,6 @@
 'use client'
 import React, {useEffect, useState} from 'react'
+import { fetchCurrentUser } from '../actions'
 
 
 const Form = ({authenticated, setAuthenticated}) => {
@@ -22,8 +23,13 @@ const Form = ({authenticated, setAuthenticated}) => {
           }
         });
         if (response.ok) {
+          const responseData = await response.json();
+          console.log(responseData)
           console.log('Token is valid');
+         const profile = await fetchCurrentUser(document.cookie.split('; ').find(cookie => cookie.startsWith('token='))?.split('=')[1])
+         if(profile.is_administrator) {
           setAuthenticated(true)
+         }
         } else {
           console.log('Token is invalid');
         }
