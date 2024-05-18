@@ -7,8 +7,8 @@ const ChatBubbles = () => {
 	return (
 		<>
 			<h2 className="text-2xl font-bold">Conversation: </h2>
-			<div class="flex items-center justify-start w-full">
-				<div class="bg-green-100 border-green-600 border p-4 pb-2 my-4 rounded-lg flex-1 max-w-2xl">
+			<div className="flex items-center justify-start w-full">
+				<div className="bg-green-100 border-green-600 border p-4 pb-2 my-4 rounded-lg flex-1 max-w-2xl">
 					<span className="font-bold">Me: </span>🔥🔥🔥🔥Lorem ipsum dolor sit
 					amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel
 					sint commodi repudiandae consequuntur voluptatum laborum numquam
@@ -19,8 +19,8 @@ const ChatBubbles = () => {
 					</div>
 				</div>
 			</div>
-			<div class="flex items-center justify-end w-full ">
-				<div class="bg-blue-100 border-blue-600 border p-4 pb-2 justify-end my-4 rounded-lg flex-1 max-w-2xl">
+			<div className="flex items-center justify-end w-full ">
+				<div className="bg-blue-100 border-blue-600 border p-4 pb-2 justify-end my-4 rounded-lg flex-1 max-w-2xl">
 					<span className="font-bold">PPW: </span>Lorem ipsum dolor sit amet
 					consectetur adipisicing elit. 😅
 					<div className="flex items-center justify-end">
@@ -31,7 +31,7 @@ const ChatBubbles = () => {
 
 			{showInput ? (
 				<div className="flex w-full items-center">
-					<textarea class="bg-green-100 border-green-600 border p-4 pb-2 my-4 rounded-lg flex-1 w-full max-w-2xl h-20"></textarea>
+					<textarea className="bg-green-100 border-green-600 border p-4 pb-2 my-4 rounded-lg flex-1 w-full max-w-2xl h-20"></textarea>
 					<Button text="Send" className="bg-green-600 h-12 m-6" />
 					<Button
 						onClick={() => setShowInput(false)}

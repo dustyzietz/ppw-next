@@ -88,12 +88,12 @@ const page = () => {
 						<h3 className="text-xl font-semibold leading-9 text-gray-900 col-span-3">
 							{design.name}
 						</h3>
-					
-            {design && design.images && typeof design.images === 'string' && JSON.parse(design.images).map((image, index) => {
+            {console.log(design)}
+            {JSON.parse(design.images).map((image, index) => {
               if(image.endsWith(".pdf")) {
-                return <PDFLink pdfUrl={image} />
+                return <PDFLink key={index} pdfUrl={image} />
               } else {
-                return <img src={image} alt="Template" className="w-12 h-12" />
+                return <img key={index} src={image} alt="Template" className="w-12 h-12" />
               }
 						})}
 						<div className=" justify-end">

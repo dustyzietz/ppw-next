@@ -34,11 +34,12 @@ const DesignForm = ({
 	};
 
 	const [imageUrl, setImageUrl] = useState("");
-	const [newDesign, setNewDesign] = useState(
-		currentDesign
-			? { ...currentDesign, images: JSON.parse(currentDesign.images) }
-			: initialDesign
-	);
+  const [newDesign, setNewDesign] = useState(
+    currentDesign
+      ? { ...currentDesign, images: Array.isArray(currentDesign.images) ? currentDesign.images : JSON.parse(currentDesign.images) } // ensure images is an array
+      : initialDesign
+  );
+  
 	const [templates, setTemplates] = useState([]);
 	const [user, setUser] = useState(null);
 	const [products, setProducts] = useState(null);
@@ -100,13 +101,13 @@ const DesignForm = ({
 	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		const res = await createDesign(token(), {
-			...newDesign,
-			images: JSON.stringify(newDesign.images),
-		});
-		if (res.design_id || res?.message === "Design updated successfully.") {
+    e.preventDefault();
+  
+    const res = await createDesign(token(), {
+      ...newDesign,
+      images: Array.isArray(newDesign.images) ? JSON.stringify(newDesign.images) : newDesign.images, 
+    });
+    if (res.design_id || res?.message === "Design updated successfully.") {
       // create message
       const messageRes = await createMessage(token(), {
         design_id: res.design_id,
@@ -114,27 +115,28 @@ const DesignForm = ({
         from_admin: false,
         new: true,
         user_id: newDesign.user_id
-      })
-
+      });
+  
       try {
-        if(messageRes.success) {
-          console.log("Message sent successfully")
+        if (messageRes.success) {
+          console.log("Message sent successfully");
         } else {
-          console.log("Something went wrong")
+          console.log("Something went wrong");
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
   
-			setNewDesign(initialDesign);
-			fetchTheDesigns();
-			setCurrentDesign(null);
-			setOpen(false);
-		} else {
-			console.log(res);
-			alert("Something went wrong");
-		}
-	};
+      setNewDesign(initialDesign);
+      fetchTheDesigns();
+      setCurrentDesign(null);
+      setOpen(false);
+    } else {
+      console.log(res);
+      alert("Something went wrong");
+    }
+  };
+  
 
 	const onChange = (e) => {
 		setNewDesign({ ...newDesign, [e.target.name]: e.target.value });
